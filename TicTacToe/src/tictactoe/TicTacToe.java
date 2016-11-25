@@ -26,6 +26,9 @@ public class TicTacToe {
     public static void main(String[] args) {
        String name;
        Board board;
+       int numberOfPlays = 0;
+       int choice;
+       int[] scoreCounter = new int[2];
        
        do
        {
@@ -35,11 +38,66 @@ public class TicTacToe {
        
        JOptionPane.showMessageDialog(null, "Hello " + name + ". Welcome to COP 2210 Tic Tac Toe!");
        
-        board = new Board();
-        // Center the board
-        board.setLocationRelativeTo(null);
-        // Make board visible
-        board.setVisible(true);
+        while (true)
+        {
+            board = new Board();
+            board.initBoard();
+            board.startingPlayer(name);
+            board.showScoreBoard(scoreCounter);
+            JOptionPane.showMessageDialog(board, board.firstPlayer());
+            
+            while(!board.gameHasWinner() && numberOfPlays < 9)
+            {   
+
+                if (board.isComputerTurn())
+                {
+                    board.computerMove();
+                    board.addMoveToBoard();
+                    board.switchTurn();
+                    board.playerMove(false);
+                }
+
+                else
+                {
+                    while (!board.playerMadeMove())
+                    {
+                        board.initBoard();
+                    }
+
+                }
+                numberOfPlays++; 
+            }
+            
+            board.updateScoreBoard(scoreCounter);
+            JOptionPane.showMessageDialog(board, board.winnerInfo());
+            
+            Object[] options = {"yes", "no"};
+            
+            choice = JOptionPane.showOptionDialog(null,
+                            "Would you like to move to another room or stay?",
+                            "",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            options,
+                            options[0]);
+            
+            if (choice == 0)
+            {
+                numberOfPlays = 0;
+                board.cleanBoard();
+                board.dispose();
+            }
+            else
+            {
+                board.showScoreBoard(scoreCounter);
+                JOptionPane.showMessageDialog(board, "Thank you for playing " + name + "!");
+                break;
+            }
+        }
+       
+        
+        
     }
     
 }

@@ -9,7 +9,10 @@ package tictactoe;
  */
 public class Player {
     private String playerName;
-    private int playerCoins;
+    private String playerAvatar;
+    private int numVictories = 0;
+    private int[] pointsCount = new int[8];
+    private boolean isWinner = false;
     
     /**
      * Construct and initializes a player's name
@@ -20,7 +23,6 @@ public class Player {
     public Player(String name)
     {
         this.playerName = name;
-        this.playerCoins = 0;
     }
     
     /**
@@ -34,13 +36,34 @@ public class Player {
     }
     
     /**
-     * Add coins to the player's account
-     * 
-     * @param coins Coins to be added 
+     * Set the player's avatar
+     * @param playerAvatar Player's avatar
      */
-    public void setPlayerCoin(int coins)
+    public void setPlayerAvatar(String playerAvatar)
     {
-        this.playerCoins = coins;
+        this.playerAvatar = playerAvatar;
+    }
+    
+    /**
+     * Add one victory to a given player
+     */
+    public void winner()
+    {
+        this.numVictories++;
+    }
+    
+    /**
+     * 
+     * @return all matches won by a given player
+     */
+    public int getTotalVictories()
+    {
+        return this.numVictories;
+    }
+    
+    public boolean hasPlayerWon()
+    {
+        return this.isWinner;
     }
     
     /**
@@ -54,12 +77,24 @@ public class Player {
     }
     
     /**
-     * Get the player's total amount of coins
+     * Get the player's avatar
      * 
-     * @return Total amount of coins
+     * @returnPlayer's avatar 
      */
-    public int getTotalCoins()
+    public String getPlayerAvatar()
     {
-        return this.playerCoins;
+        return this.playerAvatar;
+    }
+    
+    public int[] getPointsCount()
+    {
+        return this.pointsCount;
+    }
+    
+    public void printCount()
+    {
+        for (int i=0; i<this.pointsCount.length; i++)
+            System.out.print(this.pointsCount[i] + " ");
+        System.out.println();
     }
 }
