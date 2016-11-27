@@ -2,7 +2,7 @@
 package tictactoe;
 
 /**
- *Initializes a player
+ *Initializes a player along with his characteristics
  * 
  * 
  * @author Fidel
@@ -61,6 +61,10 @@ public class Player {
         return this.numVictories;
     }
     
+    /**
+     * Check whether a player has won
+     * @return true if there is a winner false otherwise
+     */
     public boolean hasPlayerWon()
     {
         return this.isWinner;
@@ -86,15 +90,13 @@ public class Player {
         return this.playerAvatar;
     }
     
+    /**
+     * Get all the points a player has gotten
+     * 
+     * @return an array of points
+     */
     public int[] getPointsCount()
     {
         return this.pointsCount;
-    }
-    
-    public void printCount()
-    {
-        for (int i=0; i<this.pointsCount.length; i++)
-            System.out.print(this.pointsCount[i] + " ");
-        System.out.println();
     }
 }

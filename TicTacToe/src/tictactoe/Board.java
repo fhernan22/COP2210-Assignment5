@@ -1,16 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package tictactoe;
 
 import java.util.Random;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
 
 /**
- *
+ * Creates a tic tac toe game board
+ * 
  * @author Fidel
  */
 public class Board extends javax.swing.JFrame {   
@@ -23,7 +18,7 @@ public class Board extends javax.swing.JFrame {
     private boolean gameHasWinner = false;
     private int currentPosition;
     private String computerAvatar;
-    private int[][] winningCombinations = {
+    private final int[][] winningCombinations = {
                                                 {1,2,3},
                                                 {1,4,7},
                                                 {1,5,9},
@@ -35,7 +30,7 @@ public class Board extends javax.swing.JFrame {
                                             };
     
     /**
-     * Creates new form Board
+     * Creates new Board
      */
     public Board() {
         initComponents();
@@ -114,6 +109,7 @@ public class Board extends javax.swing.JFrame {
     }
     
     /**
+     * Display a message of who goes first
      * 
      * @return who is the first player
      */
@@ -123,6 +119,7 @@ public class Board extends javax.swing.JFrame {
     }
     
     /**
+     * Check if the computer is next
      * 
      * @return if the computer is up next
      */
@@ -143,16 +140,32 @@ public class Board extends javax.swing.JFrame {
             this.isComputer = true;
     }
     
+    /**
+     * Updates if the player has moved
+     * @param move true if the player moves false otherwise
+     */
     public void playerMove(boolean move)
     {
         this.hasPlayerMoved = move;
     }
     
+    /**
+     * Checks whether the player moved or not
+     * 
+     * @return if the player has moved
+     */
     public boolean playerMadeMove()
     {
         return this.hasPlayerMoved;
     }
     
+    /**
+     * Determine which spot the computer is going to move to.
+     * 
+     * Creates a random number that represents one of 9 positions in the board.
+     * Then updates this position on the game board with the computer's avatar 
+     * 
+     */
     public void computerMove()
     {
         Random r = new Random();
@@ -160,7 +173,7 @@ public class Board extends javax.swing.JFrame {
  
         position = r.nextInt(9) + 1;
 
-        while (!convertToArray(position).equals(""))
+        while (!positionContent(position).equals(""))
         {  
             position = r.nextInt(9) + 1;   
         }
@@ -181,7 +194,13 @@ public class Board extends javax.swing.JFrame {
         this.currentPosition = position;
     }
     
-    public String convertToArray(int position)
+    /**
+     * Takes a position and returns the content in that position
+     * 
+     * @param position position we want to check
+     * @return content in position
+     */
+    public String positionContent(int position)
     {
         switch (position)
         {
@@ -206,6 +225,12 @@ public class Board extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Updates a position in the board with a player's avatar
+     * 
+     * @param position position we want to update
+     * @param avatar player's avatar 
+     */
     public void updateSpot(int position, String avatar)
     {
         switch (position)
@@ -240,6 +265,10 @@ public class Board extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Check the computer's current position and adds the computer's avatar
+     * to the appropriate button  
+     */
     public void addMoveToBoard()
     {
          switch (this.currentPosition)
@@ -275,6 +304,14 @@ public class Board extends javax.swing.JFrame {
          }
     }
     
+    /**
+     * Goes through the winning combinations 2d array.
+     * If the position the player moves to is in one of
+     * the winning combinations subarray we add one point
+     * to the player's pointCount
+     * @param position position player moves to
+     * @param pointsCount array of player's pointCount
+     */
     public void addToCount(int position, int[] pointsCount)
     {
         for (int i=0; i<winningCombinations.length; i++)
@@ -287,19 +324,16 @@ public class Board extends javax.swing.JFrame {
         }
     }
     
-    public void printBoard()
-    {
-        for (int i=0; i<gameBoard.length; i++)
-        {
-            for (int j=0; j<gameBoard[i].length; j++)
-            {
-                System.out.print(gameBoard[i][j] + " ");
-            }
-            System.out.println();
-        }
-        
-    }
-    
+    /**
+     * if one of the elements in the player's
+     * pointsCount array is equal to three it means
+     * that the player already made all the moves 
+     * of a given combination. Therefore, he/she has won
+     * the game
+     * 
+     * @param pointsCount player's pointsCount
+     * @return true if the player won the match, false otherwise
+     */
     public boolean playerWon(int[] pointsCount)
     {
         for (int i=0; i<pointsCount.length; i++)
@@ -311,18 +345,20 @@ public class Board extends javax.swing.JFrame {
         return false;
     }
     
+    /**
+     * Checks if there is a winner
+     * @return true if there is a winner false otherwise
+     */
     public boolean gameHasWinner()
     {
         return playerWon(player1.getPointsCount()) || playerWon(player2.getPointsCount());
     }
     
     /**
+     * Checks and return a string containing which player won the match,
+     * or if we have a tie
      * 
-     * @param scoreCounter an array of two elements.
-     * One to store a count of the player's total victories,
-     * and the other to store a count of the computer total victories
-     * 
-     * @return  which player won the match or if there was a tie
+     * @return who won the match
      */
     public String winnerInfo()
     {
@@ -354,6 +390,13 @@ public class Board extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Keeps track of the score board
+     * 
+     * @param scoreCount array of two elements. 
+     * The first elements stores the computer's score, while
+     * the second element stores the human player's score
+     */
     public void showScoreBoard(int[] scoreCount)
     {
         if (this.isComputerFirst)
@@ -372,6 +415,13 @@ public class Board extends javax.swing.JFrame {
                                     "'s score: " + scoreCount[0]);
     }
     
+    /**
+     * Updates the score board
+     * 
+     * @param scoreCount array of two elements.
+     * The first elements stores the computer's score, while
+     * the second element stores the human player's score
+     */
     public void updateScoreBoard(int[] scoreCount)
     {
         if (this.isComputerFirst)
@@ -840,40 +890,6 @@ public class Board extends javax.swing.JFrame {
         gameBoard[2][2] = jButton9.getText();
     }//GEN-LAST:event_jButton9ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */   
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(Board.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(Board.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(Board.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(Board.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new Board().setVisible(true);
-//            }
-//        });
-//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Grid_Skeleton;

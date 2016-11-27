@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 /**
  *Creates a tic tac toe game
  * 
- * 
  * @author Fidel
  */
 public class TicTacToe {
@@ -38,6 +37,7 @@ public class TicTacToe {
        
        JOptionPane.showMessageDialog(null, "Hello " + name + ". Welcome to COP 2210 Tic Tac Toe!");
        
+       // Game loop
         while (true)
         {
             board = new Board();
