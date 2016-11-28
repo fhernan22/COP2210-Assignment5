@@ -74,7 +74,7 @@ public class TicTacToe {
             Object[] options = {"yes", "no"};
             
             choice = JOptionPane.showOptionDialog(null,
-                            "Would you like to move to another room or stay?",
+                            "Would you like to play again?",
                             "",
                             JOptionPane.YES_NO_OPTION,
                             JOptionPane.QUESTION_MESSAGE,
