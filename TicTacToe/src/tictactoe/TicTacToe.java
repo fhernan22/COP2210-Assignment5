@@ -94,10 +94,7 @@ public class TicTacToe {
                 JOptionPane.showMessageDialog(board, "Thank you for playing " + name + "!");
                 break;
             }
-        }
-       
-        
-        
+        }              
     }
     
 }

@@ -11,7 +11,7 @@ import java.util.Random;
 public class Board extends javax.swing.JFrame {   
     private Player player1;
     private Player player2;
-    private String[][] gameBoard = new String[3][3];
+    private String[] gameBoard = new String[9];
     private boolean isComputerFirst = false;
     private boolean isComputer = false;
     private boolean hasPlayerMoved = false;
@@ -47,15 +47,15 @@ public class Board extends javax.swing.JFrame {
         // Make board visible
         setVisible(true);
         
-        gameBoard[0][0] = jButton1.getText();
-        gameBoard[0][1] = jButton2.getText();
-        gameBoard[0][2] = jButton3.getText();
-        gameBoard[1][0] = jButton4.getText();
-        gameBoard[1][1] = jButton5.getText();
-        gameBoard[1][2] = jButton6.getText();
-        gameBoard[2][0] = jButton7.getText();
-        gameBoard[2][1] = jButton8.getText();
-        gameBoard[2][2] = jButton9.getText();
+        gameBoard[0] = jButton1.getText();
+        gameBoard[1] = jButton2.getText();
+        gameBoard[2] = jButton3.getText();
+        gameBoard[3]= jButton4.getText();
+        gameBoard[4] = jButton5.getText();
+        gameBoard[5] = jButton6.getText();
+        gameBoard[6] = jButton7.getText();
+        gameBoard[7] = jButton8.getText();
+        gameBoard[8] = jButton9.getText();
     }
     
     /**
@@ -205,23 +205,23 @@ public class Board extends javax.swing.JFrame {
         switch (position)
         {
             case 1:
-                return gameBoard[0][0];
+                return gameBoard[0];
             case 2:
-                return gameBoard[0][1];
+                return gameBoard[1];
             case 3:
-                return gameBoard[0][2];
+                return gameBoard[2];
             case 4:
-                return gameBoard[1][0];
+                return gameBoard[3];
             case 5:
-                return gameBoard[1][1];
+                return gameBoard[4];
             case 6:
-                return gameBoard[1][2];
+                return gameBoard[5];
             case 7:
-                return gameBoard[2][0];
+                return gameBoard[6];
             case 8:
-                return gameBoard[2][1];
+                return gameBoard[7];
             default:
-                return gameBoard[2][2];
+                return gameBoard[8];
         }
     }
     
@@ -236,31 +236,31 @@ public class Board extends javax.swing.JFrame {
         switch (position)
         {
             case 1:
-                gameBoard[0][0] = avatar;
+                gameBoard[0] = avatar;
                 break;
             case 2:
-                gameBoard[0][1] = avatar;
+                gameBoard[1] = avatar;
                 break;
             case 3:
-                gameBoard[0][2] = avatar;
+                gameBoard[2] = avatar;
                 break;
             case 4:
-                gameBoard[1][0] = avatar;
+                gameBoard[3] = avatar;
                 break;
             case 5:
-                gameBoard[1][1] = avatar;
+                gameBoard[4] = avatar;
                 break;
             case 6:
-                gameBoard[1][2] = avatar;
+                gameBoard[5] = avatar;
                 break;
             case 7:
-                gameBoard[2][0] = avatar;
+                gameBoard[6] = avatar;
                 break;
             case 8:
-                gameBoard[2][1] = avatar;
+                gameBoard[8] = avatar;
                 break;
             default:
-                gameBoard[2][2] = avatar;
+                gameBoard[0] = avatar;
                 break;
         }
     }
@@ -631,7 +631,7 @@ public class Board extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
-        if (gameBoard[0][0].equals(""))
+        if (gameBoard[0].equals(""))
         {
             if (this.isComputerFirst)
             {
@@ -655,12 +655,12 @@ public class Board extends javax.swing.JFrame {
             this.isComputer = false;
         }
    
-        gameBoard[0][0] = jButton1.getText();
+        gameBoard[0] = jButton1.getText();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
       
-        if (gameBoard[0][1].equals(""))
+        if (gameBoard[1].equals(""))
         {
             if (this.isComputerFirst)
             {
@@ -684,12 +684,12 @@ public class Board extends javax.swing.JFrame {
             this.isComputer = false;
         }
 
-        gameBoard[0][1] = jButton2.getText();
+        gameBoard[1] = jButton2.getText();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-        if (gameBoard[0][2].equals(""))
+        if (gameBoard[2].equals(""))
         {
             if (this.isComputerFirst)
             {
@@ -713,12 +713,12 @@ public class Board extends javax.swing.JFrame {
             this.isComputer = false;
         }
         
-        gameBoard[0][2] = jButton3.getText();
+        gameBoard[2] = jButton3.getText();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
 
-        if (gameBoard[1][0].equals(""))
+        if (gameBoard[3].equals(""))
         {
             if (this.isComputerFirst)
             {
@@ -742,12 +742,12 @@ public class Board extends javax.swing.JFrame {
             this.isComputer = false;
         }
         
-        gameBoard[1][0] = jButton4.getText();
+        gameBoard[3] = jButton4.getText();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
 
-        if (gameBoard[1][1].equals(""))
+        if (gameBoard[4].equals(""))
         {
             if (this.isComputerFirst)
             {
@@ -771,12 +771,12 @@ public class Board extends javax.swing.JFrame {
             this.isComputer = false;
         }
         
-        gameBoard[1][1] = jButton5.getText();
+        gameBoard[4] = jButton5.getText();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
 
-        if (gameBoard[1][2].equals(""))
+        if (gameBoard[5].equals(""))
         {
             if (this.isComputerFirst)
             {
@@ -800,12 +800,12 @@ public class Board extends javax.swing.JFrame {
             this.isComputer = false;
         }
 
-        gameBoard[1][2] = jButton6.getText();
+        gameBoard[5] = jButton6.getText();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
 
-        if (gameBoard[2][0].equals(""))
+        if (gameBoard[6].equals(""))
         {
             if (this.isComputerFirst)
             {
@@ -829,12 +829,12 @@ public class Board extends javax.swing.JFrame {
             this.isComputer = false;
         }
         
-        gameBoard[2][0] = jButton7.getText();
+        gameBoard[6] = jButton7.getText();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
        
-        if (gameBoard[2][1].equals(""))
+        if (gameBoard[7].equals(""))
         {
             if (this.isComputerFirst)
             {
@@ -858,12 +858,12 @@ public class Board extends javax.swing.JFrame {
             this.isComputer = false;
         }
         
-        gameBoard[2][1] = jButton8.getText();
+        gameBoard[7] = jButton8.getText();
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
 
-        if (gameBoard[2][2].equals(""))
+        if (gameBoard[8].equals(""))
         {
             if (this.isComputerFirst)
             {
@@ -887,7 +887,7 @@ public class Board extends javax.swing.JFrame {
             this.isComputer = false;
         }
         
-        gameBoard[2][2] = jButton9.getText();
+        gameBoard[8] = jButton9.getText();
     }//GEN-LAST:event_jButton9ActionPerformed
 
 
