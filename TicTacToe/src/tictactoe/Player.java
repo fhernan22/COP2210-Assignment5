@@ -11,7 +11,6 @@ public class Player {
     private String playerName;
     private String playerAvatar;
     private int numVictories = 0;
-    private int[] pointsCount = new int[8];
     private boolean isWinner = false;
     
     /**
@@ -88,15 +87,5 @@ public class Player {
     public String getPlayerAvatar()
     {
         return this.playerAvatar;
-    }
-    
-    /**
-     * Get all the points a player has gotten
-     * 
-     * @return an array of points
-     */
-    public int[] getPointsCount()
-    {
-        return this.pointsCount;
     }
 }

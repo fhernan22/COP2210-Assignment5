@@ -40,9 +40,8 @@ public class TicTacToe {
        // Game loop
         while (true)
         {
-            board = new Board();
+            board = new Board(name);
             board.initBoard();
-            board.startingPlayer(name);
             board.showScoreBoard(scoreCounter);
             JOptionPane.showMessageDialog(board, board.firstPlayer());
             
