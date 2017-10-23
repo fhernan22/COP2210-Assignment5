@@ -51,8 +51,6 @@ public class TicTacToe {
                 if (board.isComputerTurn())
                 {
                     board.computerMove();
-                    board.addMoveToBoard();
-                    board.switchTurn();
                     board.playerMove(false);
                 }
 
@@ -68,7 +66,10 @@ public class TicTacToe {
             }
             
             board.updateScoreBoard(scoreCounter);
-            JOptionPane.showMessageDialog(board, board.winnerInfo());
+            if (board.getWinner() == null)
+                JOptionPane.showMessageDialog(board, "It's a tie!");
+            else
+                JOptionPane.showMessageDialog(board, board.getWinner().getPlayerName() + " wins!");
             
             Object[] options = {"yes", "no"};
             

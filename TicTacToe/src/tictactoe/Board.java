@@ -2,7 +2,9 @@
 package tictactoe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * Creates a tic tac toe game board
@@ -17,8 +19,7 @@ public class Board extends javax.swing.JFrame {
     private boolean isComputer = false;
     private boolean hasPlayerMoved = false;
     private boolean gameHasWinner = false;
-    private int currentPosition;
-    private String computerAvatar;
+    private int numPlays;
     
     /**
      *Determines who goes first the player or the computer
@@ -33,21 +34,22 @@ public class Board extends javax.swing.JFrame {
         initComponents();
         Random r = new Random();
         int outcome = r.nextInt(10) + 1;
+        this.numPlays = 0;
         
         if (outcome <= 5)
         {
-            player1 = new Player(name);
+            player1 = new Player(name, false);
             player1.setPlayerAvatar("X");
             
-            player2 = new Player("Computer");
+            player2 = new Player("Computer", true);
             player2.setPlayerAvatar("O");
         }
         else
         {
-            player1 = new Player("Computer");
+            player1 = new Player("Computer", true);
             player1.setPlayerAvatar("X");
             
-            player2 = new Player(name);
+            player2 = new Player(name, false);
             player2.setPlayerAvatar("O");
             
             this.isComputerFirst = true;
@@ -66,6 +68,7 @@ public class Board extends javax.swing.JFrame {
         // Make board visible
         setVisible(true);
         
+        this.numPlays = 0;
         gameBoard[0] = jButton1.getText();
         gameBoard[1] = jButton2.getText();
         gameBoard[2] = jButton3.getText();
@@ -82,6 +85,7 @@ public class Board extends javax.swing.JFrame {
      */
     public void cleanBoard()
     {
+        this.numPlays = 0;
         jButton1.setText("");
         jButton2.setText("");
         jButton3.setText("");
@@ -115,22 +119,12 @@ public class Board extends javax.swing.JFrame {
     }
     
     /**
-     * Switch turn between player and computer
-     */
-    public void switchTurn()
-    {
-        if (this.isComputer == true)
-            this.isComputer = false;
-        else
-            this.isComputer = true;
-    }
-    
-    /**
      * Updates if the player has moved
      * @param move true if the player moves false otherwise
      */
     public void playerMove(boolean move)
     {
+        this.numPlays++;
         this.hasPlayerMoved = move;
     }
     
@@ -153,131 +147,28 @@ public class Board extends javax.swing.JFrame {
      */
     public void computerMove()
     {
-        Random r = new Random();
-        int position;
- 
-        position = r.nextInt(9) + 1;
+        int index = -1;
 
-        while (!positionContent(position).equals(""))
-        {  
-            position = r.nextInt(9) + 1;   
-        }
-        
         if (this.isComputerFirst)
         {
-            updateSpot(position, player1.getPlayerAvatar());
-            this.computerAvatar = player1.getPlayerAvatar();
-        }   
+
+            index = minimax(this.gameBoard, true, player1)[1];
+            this.gameBoard[index] = player1.getPlayerAvatar();
+            addMoveToBoard(index, player1);
+            this.isComputer = false;    
+        }
+            
         else
         {
-            updateSpot(position, player2.getPlayerAvatar());
-            this.computerAvatar = player2.getPlayerAvatar();
-        }
 
-        this.currentPosition = position;
-    }
-    
-    /*public int minimax(Player player)
-    {
-        ArrayList<Integer> spots = availableSpots();
-    }*/
-    
-    private ArrayList<Integer> availableSpots()
-    {
-        ArrayList<Integer> spots = new ArrayList<>();
-        
-        for (int i=0; i<gameBoard.length; i++)
-        {
-            if (!gameBoard[i].equals("x") && !gameBoard[i].equals("o"))
-                spots.add(i);
+            index = minimax(this.gameBoard, true, player2)[1];
+            this.gameBoard[index] = player2.getPlayerAvatar();
+            addMoveToBoard(index, player2);
+            this.isComputer = false;
         }
-        return spots;
-    }
-    
-    /**
-     * Takes a position and returns the content in that position
-     * 
-     * @param position position we want to check
-     * @return content in position
-     */
-    public String positionContent(int position)
-    {
-        return gameBoard[position - 1];
-    }
-    
-    /**
-     * Updates a position in the board with a player's avatar
-     * 
-     * @param position position we want to update
-     * @param avatar player's avatar 
-     */
-    public void updateSpot(int position, String avatar)
-    {
-        gameBoard[position - 1] = avatar;
-    }
-    
-    /**
-     * Check the computer's current position and adds the computer's avatar
-     * to the appropriate button  
-     */
-    public void addMoveToBoard()
-    {
-         switch (this.currentPosition)
-         {
-            case 1:
-                jButton1.setText(this.computerAvatar);
-                break;
-            case 2:
-                jButton2.setText(this.computerAvatar);
-                break;
-            case 3:
-                jButton3.setText(this.computerAvatar);
-                break;
-            case 4:
-                jButton4.setText(this.computerAvatar);
-                break;
-            case 5:
-                jButton5.setText(this.computerAvatar);
-                break;
-            case 6:
-                jButton6.setText(this.computerAvatar);
-                break;
-            case 7:
-                jButton7.setText(this.computerAvatar);
-                break;
-            case 8:
-                jButton8.setText(this.computerAvatar);
-                break;
-            default:
-                jButton9.setText(this.computerAvatar);
-                break;
             
-         }
-    }
-    
-    /**
-     * Return whether there is a winner or not
-     * 
-     * Check all possible combinations of winning moves.
-     * If a particular combination is populated by a player's 
-     * avatar there is a winner otherwise there is a tie.
-     * 
-     * @param avatar player's avatar
-     * @return true if the player won the match, false otherwise
-     */
-    public boolean playerWon(String avatar)
-    {
-        if ((gameBoard[0].equals(avatar) && gameBoard[1].equals(avatar) &&  gameBoard[2].equals(avatar)) ||
-            (gameBoard[3].equals(avatar) && gameBoard[4].equals(avatar) &&  gameBoard[5].equals(avatar)) ||
-            (gameBoard[0].equals(avatar) && gameBoard[3].equals(avatar) &&  gameBoard[6].equals(avatar)) ||
-            (gameBoard[6].equals(avatar) && gameBoard[7].equals(avatar) &&  gameBoard[8].equals(avatar)) ||
-            (gameBoard[1].equals(avatar) && gameBoard[4].equals(avatar) &&  gameBoard[7].equals(avatar)) ||
-            (gameBoard[2].equals(avatar) && gameBoard[5].equals(avatar) &&  gameBoard[8].equals(avatar)) ||
-            (gameBoard[0].equals(avatar) && gameBoard[4].equals(avatar) &&  gameBoard[8].equals(avatar)) ||
-            (gameBoard[2].equals(avatar) && gameBoard[4].equals(avatar) &&  gameBoard[6].equals(avatar)))
-                return true;
-        
-        return false;
+
+        this.numPlays++;
     }
     
     /**
@@ -286,44 +177,46 @@ public class Board extends javax.swing.JFrame {
      */
     public boolean gameHasWinner()
     {
-        return playerWon(player1.getPlayerAvatar()) || playerWon(player2.getPlayerAvatar());
+        return playerWon(this.gameBoard, player1) || playerWon(this.gameBoard, player2);
     }
     
     /**
-     * Checks and return a string containing which player won the match,
+     * Checks and return which player won the match,
      * or if we have a tie
      * 
      * @return who won the match
      */
-    public String winnerInfo()
+    public Player getWinner()
     {
         if (this.isComputerFirst)
         {
-            if (playerWon(player1.getPlayerAvatar()))
+            if (playerWon(this.gameBoard, player1))
             {
-                return player1.getPlayerName() + " won!";
+                return player1;
             }
-            else if (playerWon(player2.getPlayerAvatar()))
+            else if (playerWon(this.gameBoard, player2))
             {
-                return player2.getPlayerName() + " won!";
+                return player2;
             }
             else
-                return "It's a tie";
+                return null;
         }
         else
         {
-            if (playerWon(player2.getPlayerAvatar()))
+            if (playerWon(this.gameBoard, player2))
             {
-                return player2.getPlayerName() + " won!";
+                return player2;
             }
-            else if (playerWon(player1.getPlayerAvatar()))
+            else if (playerWon(this.gameBoard, player1))
             {
-                return player1.getPlayerName() + " won!";
+                return player1;
             }
             else
-                return "It's a tie!";
+                return null;
         }
     }
+    
+
     
     /**
      * Keeps track of the score board
@@ -361,26 +254,195 @@ public class Board extends javax.swing.JFrame {
     {
         if (this.isComputerFirst)
         {
-            if (playerWon(player1.getPlayerAvatar()))
+            if (playerWon(this.gameBoard, player1))
             {
                 scoreCount[0]++;
             }
-            else if (playerWon(player2.getPlayerAvatar()))
+            else if (playerWon(this.gameBoard, player2))
             {
                 scoreCount[1]++;
             }
         }
         else
         {
-            if (playerWon(player2.getPlayerAvatar()))
+            if (playerWon(this.gameBoard, player2))
             {
                 scoreCount[0]++;
             }
-            else if (playerWon(player1.getPlayerAvatar()))
+            else if (playerWon(this.gameBoard, player1))
             {
                 scoreCount[1]++;
             }
         }
+    }
+    
+    /***********************************************************************
+     * ************************Helper Fucntions****************************/
+    
+    private int[] minimax(String[] board, boolean maximizingPlayer, Player player)
+    {
+        ArrayList<Integer> actions = availableSpots(board);
+        int bestIndex = 1;
+        int maxScore = Integer.MIN_VALUE;
+        int minScore = Integer.MAX_VALUE;
+        int[] node = new int[2];
+        
+        if (playerWon(board, player) && player.iSPLayerAI())
+        {
+            node[0] = 10;
+            return node;
+        }
+            
+        else if (playerWon(board, player) && !player.iSPLayerAI())
+        {
+            node[0] = -10;
+            return node;
+        }
+            
+        else if (actions.size() == 0)
+        {
+            node[0] = 0;
+            return node;
+        }
+        
+        if (maximizingPlayer)
+        {
+            
+            int val = Integer.MIN_VALUE;
+            
+            for (Integer action: actions)
+            {
+                String[] tempBoard = Arrays.copyOf(board, board.length);
+                tempBoard[action] = player.getPlayerAvatar();
+
+                if (this.isComputerFirst)
+                    val = minimax(tempBoard, false, player2)[0];
+                else
+                    val = minimax(tempBoard, false, player1)[0];
+                            
+                if (val >= maxScore)
+                {
+                    maxScore = val;
+                    bestIndex = action;
+                }
+            }
+            
+            node[0] = maxScore;
+            node[1] = bestIndex;
+        }
+        else
+        {
+            
+            int val = Integer.MAX_VALUE;
+            
+            for (Integer action: actions)
+            {
+                String[] tempBoard = Arrays.copyOf(board, board.length);
+                tempBoard[action] = player.getPlayerAvatar();
+                
+                if (this.isComputerFirst)
+                    val = minimax(tempBoard, true, player1)[0];
+                else
+                    val = minimax(tempBoard, true, player2)[0];
+                                  
+                if (val <= minScore)
+                {
+                    minScore = val;
+                    bestIndex = action;
+                }
+            }
+            
+            node[0] = minScore;
+            node[1] = bestIndex;
+        }
+        return node;
+    }
+    
+    private ArrayList<Integer> availableSpots(String[] board)
+    {
+        ArrayList<Integer> spots = new ArrayList<>();
+        
+        for (int i=0; i<board.length; i++)
+        {
+            if (!board[i].equals("X") && !board[i].equals("O"))
+                spots.add(i);
+        }
+        return spots;
+    }
+    
+    /**
+     * Updates a position in the board with a player's avatar
+     * 
+     * @param position position we want to update
+     * @param avatar player's avatar 
+     */
+    private void updateSpot(int position, String avatar)
+    {
+        gameBoard[position - 1] = avatar;
+    }
+    
+    /**
+     * Check the computer's current position and adds the computer's avatar
+     * to the appropriate button  
+     */
+    private void addMoveToBoard(int position, Player player)
+    {
+         switch (position)
+         {
+            case 0:
+                jButton1.setText(player.getPlayerAvatar());
+                break;
+            case 1:
+                jButton2.setText(player.getPlayerAvatar());
+                break;
+            case 2:
+                jButton3.setText(player.getPlayerAvatar());
+                break;
+            case 3:
+                jButton4.setText(player.getPlayerAvatar());
+                break;
+            case 4:
+                jButton5.setText(player.getPlayerAvatar());
+                break;
+            case 5:
+                jButton6.setText(player.getPlayerAvatar());
+                break;
+            case 6:
+                jButton7.setText(player.getPlayerAvatar());
+                break;
+            case 7:
+                jButton8.setText(player.getPlayerAvatar());
+                break;
+            default:
+                jButton9.setText(player.getPlayerAvatar());
+                break;
+            
+         }
+    }
+    
+    /**
+     * Return whether there is a winner or not
+     * 
+     * Check all possible combinations of winning moves.
+     * If a particular combination is populated by a player's 
+     * avatar there is a winner otherwise there is a tie.
+     * 
+     * @param avatar player's avatar
+     * @return true if the player won the match, false otherwise
+     */
+    private boolean playerWon(String[] board, Player player)
+    {
+        if ((board[0].equals(player.getPlayerAvatar()) && board[1].equals(player.getPlayerAvatar()) &&  board[2].equals(player.getPlayerAvatar())) ||
+            (board[3].equals(player.getPlayerAvatar()) && board[4].equals(player.getPlayerAvatar()) &&  board[5].equals(player.getPlayerAvatar())) ||
+            (board[0].equals(player.getPlayerAvatar()) && board[3].equals(player.getPlayerAvatar()) &&  board[6].equals(player.getPlayerAvatar())) ||
+            (board[6].equals(player.getPlayerAvatar()) && board[7].equals(player.getPlayerAvatar()) &&  board[8].equals(player.getPlayerAvatar())) ||
+            (board[1].equals(player.getPlayerAvatar()) && board[4].equals(player.getPlayerAvatar()) &&  board[7].equals(player.getPlayerAvatar())) ||
+            (board[2].equals(player.getPlayerAvatar()) && board[5].equals(player.getPlayerAvatar()) &&  board[8].equals(player.getPlayerAvatar())) ||
+            (board[0].equals(player.getPlayerAvatar()) && board[4].equals(player.getPlayerAvatar()) &&  board[8].equals(player.getPlayerAvatar())) ||
+            (board[2].equals(player.getPlayerAvatar()) && board[4].equals(player.getPlayerAvatar()) &&  board[6].equals(player.getPlayerAvatar())))
+                return true;
+        
+        return false;
     }
 
     /**
@@ -571,12 +633,12 @@ public class Board extends javax.swing.JFrame {
             if (this.isComputerFirst)
             {
                 jButton1.setText(player2.getPlayerAvatar());
-                playerWon(player2.getPlayerAvatar());
+                playerWon(this.gameBoard, player2);
             }
             else
             {
                 jButton1.setText(player1.getPlayerAvatar());
-                playerWon(player1.getPlayerAvatar());
+                playerWon(this.gameBoard, player1);
             }
             
             this.hasPlayerMoved = true;
@@ -598,12 +660,12 @@ public class Board extends javax.swing.JFrame {
             if (this.isComputerFirst)
             {
                 jButton2.setText(player2.getPlayerAvatar());
-                playerWon(player2.getPlayerAvatar());
+                playerWon(this.gameBoard, player2);
             }
             else
             {
                 jButton2.setText(player1.getPlayerAvatar());
-                playerWon(player1.getPlayerAvatar());
+                playerWon(this.gameBoard, player1);
             }
             
             this.hasPlayerMoved = true;
@@ -625,12 +687,12 @@ public class Board extends javax.swing.JFrame {
             if (this.isComputerFirst)
             {
                 jButton3.setText(player2.getPlayerAvatar());
-                playerWon(player2.getPlayerAvatar());
+                playerWon(this.gameBoard, player2);
             }
             else
             {
                 jButton3.setText(player1.getPlayerAvatar());
-                playerWon(player1.getPlayerAvatar());
+                playerWon(this.gameBoard, player1);
             }
             
             this.hasPlayerMoved = true;
@@ -652,12 +714,12 @@ public class Board extends javax.swing.JFrame {
             if (this.isComputerFirst)
             {
                 jButton4.setText(player2.getPlayerAvatar());
-                playerWon(player2.getPlayerAvatar());
+                playerWon(this.gameBoard, player2);
             }
             else
             {
                 jButton4.setText(player1.getPlayerAvatar());
-                playerWon(player1.getPlayerAvatar());
+                playerWon(this.gameBoard, player1);
             }
             
             this.hasPlayerMoved = true;
@@ -679,12 +741,12 @@ public class Board extends javax.swing.JFrame {
             if (this.isComputerFirst)
             {
                 jButton5.setText(player2.getPlayerAvatar());
-                playerWon(player2.getPlayerAvatar());
+                playerWon(this.gameBoard, player2);
             }
             else
             {
                 jButton5.setText(player1.getPlayerAvatar());
-                playerWon(player1.getPlayerAvatar());
+                playerWon(this.gameBoard, player1);
             }
             
             this.hasPlayerMoved = true;
@@ -706,12 +768,12 @@ public class Board extends javax.swing.JFrame {
             if (this.isComputerFirst)
             {
                 jButton6.setText(player2.getPlayerAvatar());
-                playerWon(player2.getPlayerAvatar());
+                playerWon(this.gameBoard, player2);
             }
             else
             {
                 jButton6.setText(player1.getPlayerAvatar());
-                playerWon(player1.getPlayerAvatar());
+                playerWon(this.gameBoard, player1);
             }
             
             this.hasPlayerMoved = true;
@@ -733,12 +795,12 @@ public class Board extends javax.swing.JFrame {
             if (this.isComputerFirst)
             {
                 jButton7.setText(player2.getPlayerAvatar());
-                playerWon(player2.getPlayerAvatar());
+                playerWon(this.gameBoard, player2);
             }
             else
             {
                 jButton7.setText(player1.getPlayerAvatar());
-                playerWon(player1.getPlayerAvatar());
+                playerWon(this.gameBoard, player1);
             }
             
             this.hasPlayerMoved = true;
@@ -760,12 +822,12 @@ public class Board extends javax.swing.JFrame {
             if (this.isComputerFirst)
             {
                 jButton8.setText(player2.getPlayerAvatar());
-                playerWon(player2.getPlayerAvatar());
+                playerWon(this.gameBoard, player2);
             }
             else
             {
                 jButton8.setText(player1.getPlayerAvatar());
-                playerWon(player1.getPlayerAvatar());
+                playerWon(this.gameBoard, player1);
             }
             
             this.hasPlayerMoved = true;
@@ -787,12 +849,12 @@ public class Board extends javax.swing.JFrame {
             if (this.isComputerFirst)
             {
                 jButton9.setText(player2.getPlayerAvatar());
-                playerWon(player2.getPlayerAvatar());
+                playerWon(this.gameBoard, player2);
             }
             else
             {
                 jButton9.setText(player1.getPlayerAvatar());
-                playerWon(player1.getPlayerAvatar());
+                playerWon(this.gameBoard, player1);
             }
             
             this.hasPlayerMoved = true;

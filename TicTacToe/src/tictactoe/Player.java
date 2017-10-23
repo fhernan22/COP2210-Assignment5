@@ -10,8 +10,7 @@ package tictactoe;
 public class Player {
     private String playerName;
     private String playerAvatar;
-    private int numVictories = 0;
-    private boolean isWinner = false;
+    private boolean isAI = false;
     
     /**
      * Construct and initializes a player's name
@@ -19,9 +18,10 @@ public class Player {
      * 
      * @param name Player's name
      */
-    public Player(String name)
+    public Player(String name, boolean isAI)
     {
         this.playerName = name;
+        this.isAI = isAI;
     }
     
     /**
@@ -42,33 +42,7 @@ public class Player {
     {
         this.playerAvatar = playerAvatar;
     }
-    
-    /**
-     * Add one victory to a given player
-     */
-    public void winner()
-    {
-        this.numVictories++;
-    }
-    
-    /**
-     * 
-     * @return all matches won by a given player
-     */
-    public int getTotalVictories()
-    {
-        return this.numVictories;
-    }
-    
-    /**
-     * Check whether a player has won
-     * @return true if there is a winner false otherwise
-     */
-    public boolean hasPlayerWon()
-    {
-        return this.isWinner;
-    }
-    
+   
     /**
      * Get the player's name
      * 
@@ -87,5 +61,15 @@ public class Player {
     public String getPlayerAvatar()
     {
         return this.playerAvatar;
+    }
+    
+    public void AIPlayer(boolean result)
+    {
+        this.isAI = result;
+    }
+    
+    public boolean iSPLayerAI()
+    {
+        return this.isAI;
     }
 }
